@@ -57,7 +57,7 @@ Before starting, ensure you have:
 - **Node.js** (version 16.0 or higher)
 - **npm** (version 8.0 or higher) or **yarn**
 - **Git** (for version control)
-- **Backend API** running on `http://127.0.0.1:3080`
+- **Backend API** running on `https://localhost:3080` or `https://your-hostname`
 
 ## Installation
 
@@ -82,33 +82,34 @@ yarn install
 
 ### 3. Environment Setup
 
-Copy the environment template and configure your settings:
+Initialisation file .env
 
 ```bash
-# Copy the example environment file
-cp .env.example .env
-
-# Edit the environment variables as needed
-nano .env
+touch .env
 ```
 
 #### Essential Environment Variables
 
 ```env
 # API Configuration
-REACT_APP_API_BASE_URL=http://127.0.0.1:3080
+REACT_APP_API_BASE_URL=https://mycontactsserveur.onrender.com/
 REACT_APP_API_TIMEOUT=10000
 
 # Application Configuration
 REACT_APP_NAME=MyContacts
 REACT_APP_ENV=development
 
-# Authentication (optional - defaults provided)
+# Authentication Configuration
 REACT_APP_AUTH_TOKEN_KEY=authToken
 REACT_APP_USER_DATA_KEY=userData
-```
 
-> 📖 **For complete environment variable documentation**, see [`.env.example`](.env.example)
+# Build Configuration
+BUILD_PATH=build
+
+# Testing Configuration
+NODE_ENV=development
+COVERAGE_THRESHOLD=80
+```
 
 ## Development
 
@@ -139,30 +140,181 @@ npm run build
 
 This creates an optimized `build` folder ready for production deployment.
 
-### Deployment Options
+## 🚀 **Netlify Deployment**
 
-#### 1. Static Hosting Services
+### **Method 1: Drag & Drop (Quickest)**
 
-**Netlify:**
-```bash
-npm run build
-# Drag and drop build folder to Netlify dashboard
+1. **Build the project:**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to Netlify:**
+   - Go to [netlify.com](https://netlify.com)
+   - Sign up/Login with GitHub, GitLab, or email
+   - Drag and drop the `build` folder to the deploy area
+   - Your app will be live in seconds!
+
+### **Method 2: Git Integration (Recommended for Production)**
+
+1. **Connect Repository:**
+   - Push your code to GitHub/GitLab
+   - In Netlify dashboard, click "New site from Git"
+   - Connect your repository
+   - Choose the branch (usually `main` or `master`)
+
+2. **Build Settings:**
+   ```
+   Build command: npm run build
+   Publish directory: build
+   Node version: 18 (or latest)
+   ```
+
+3. **Environment Variables:**
+   - Go to Site settings → Environment variables
+   - Add your environment variables:
+     ```
+     REACT_APP_API_BASE_URL=https://mycontactsserveur.onrender.com
+     REACT_APP_API_TIMEOUT=10000
+     REACT_APP_NAME=MyContacts
+     ```
+
+### **Method 3: Netlify CLI**
+
+1. **Install Netlify CLI:**
+   ```bash
+   npm install -g netlify-cli
+   ```
+
+2. **Login and Deploy:**
+   ```bash
+   # Login to Netlify
+   netlify login
+   
+   # Build and deploy
+   npm run build
+   netlify deploy --prod --dir=build
+   ```
+
+### **Netlify Configuration File**
+
+Create `netlify.toml` in your project root:
+
+```toml
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 ```
 
-**Vercel:**
+### **Netlify Features for React Apps**
+
+- **Automatic Deploys**: Every push to main branch triggers a new deploy
+- **Preview Deploys**: Pull requests get preview URLs
+- **Form Handling**: Built-in form processing (if needed)
+- **Edge Functions**: Serverless functions at the edge
+- **CDN**: Global content delivery network
+- **HTTPS**: Automatic SSL certificates
+- **Custom Domains**: Easy custom domain setup
+
+### **Environment Variables Setup**
+
+1. **In Netlify Dashboard:**
+   - Go to Site settings → Environment variables
+   - Add each variable with its value
+
+2. **Required Variables:**
+   ```
+   REACT_APP_API_BASE_URL
+   REACT_APP_API_TIMEOUT
+   REACT_APP_NAME
+   REACT_APP_ENV 
+   ```
+
+3. **Optional Variables:**
+   ```
+   REACT_APP_DEBUG
+   REACT_APP_ENABLE_REGISTRATION
+   REACT_APP_ENABLE_CONTACTS
+   REACT_APP_DEFAULT_LANGUAGE
+   ```
+
+### **Troubleshooting Netlify Deployment**
+
+**Build Fails:**
+- Check Node.js version (should be 18+)
+- Verify all dependencies are in `package.json`
+- Check build logs in Netlify dashboard
+
+**Environment Variables Not Working:**
+- Ensure variables start with `REACT_APP_`
+- Redeploy after adding new variables
+- Check variable names match exactly
+
+**API Calls Failing:**
+- Verify CORS settings on your backend
+- Check API URL is correct
+- Ensure backend is accessible from Netlify
+
+**Routing Issues:**
+- Add `netlify.toml` with redirect rules (see above)
+- Or add `_redirects` file in `public/` folder:
+  ```
+  /*    /index.html   200
+  ```
+
+## **Alternative Deployment Options**
+
+### **Vercel**
+
 ```bash
+# Install Vercel CLI
 npm install -g vercel
+
+# Deploy env prod
 vercel --prod
+
+# Deploy env dev
+vercel --dev
 ```
 
-**GitHub Pages:**
+### **GitHub Pages**
+
 ```bash
+# Install gh-pages
 npm install --save-dev gh-pages
-npm run build
-npx gh-pages -d build
+
+# Add to package.json scripts:
+# "predeploy": "npm run build",
+# "deploy": "gh-pages -d build"
+
+# Deploy
+npm run deploy
 ```
 
-#### 2. Traditional Web Server
+### **Traditional Web Server**
 
 **Apache/Nginx:**
 ```bash
@@ -171,7 +323,7 @@ npm run build
 sudo cp -r build/* /var/www/html/
 ```
 
-#### 3. Docker Deployment
+### **Docker Deployment**
 
 Create `Dockerfile`:
 ```dockerfile
@@ -200,17 +352,17 @@ docker run -p 80:80 contacts-app
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| `react` | ^19.1.1 | UI library |
-| `react-dom` | ^19.1.1 | React rendering |
-| `react-router-dom` | ^7.9.1 | Client-side routing |
+| `react` | ^18.2.0 | UI library |
+| `react-dom` | ^18.2.0 | React rendering |
+| `react-router-dom` | ^6.8.0 | Client-side routing |
 | `axios` | ^1.12.2 | HTTP client for API calls |
 
 ### Development Dependencies
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| `react-scripts` | ^0.0.0 | Create React App build tools |
-| `@testing-library/react` | ^16.3.0 | React testing utilities |
+| `react-scripts` | ^5.0.1 | Create React App build tools |
+| `@testing-library/react` | ^13.4.0 | React testing utilities |
 | `@testing-library/jest-dom` | ^6.8.0 | Jest DOM matchers |
 | `@testing-library/user-event` | ^13.5.0 | User interaction testing |
 | `web-vitals` | ^2.1.4 | Performance monitoring |
@@ -223,7 +375,8 @@ The API base URL is configured in `src/api/AxiosInstance.js`:
 
 ```javascript
 const AxiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:3080/',
+    baseURL: 'http://127.0.0.1:3080/' || 'https://mycontactsserveur.onrender.com',
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },
@@ -335,7 +488,7 @@ src/__tests__/
 
 ### Key Features Tested
 
-- **Authentication Flow**: Login, register, logout with token management
+- **Authentication Flow**: Login, register with token management
 - **Contact Management**: Full CRUD operations with validation
 - **Form Validation**: Real-time validation with user feedback
 - **Error Handling**: Comprehensive error scenarios and user messages
