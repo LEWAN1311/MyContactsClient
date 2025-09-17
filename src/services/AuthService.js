@@ -44,8 +44,7 @@ const AuthService = {
     // Déconnexion
     logout: async () => {
         try {
-            // Optionnel: Appeler l'API de déconnexion côté serveur
-            // await AxiosInstance.post('/auth/logout');
+            await AxiosInstance.post('/auth/logout');
             
             // Supprimer les données d'authentification du localStorage
             localStorage.removeItem('authToken');
