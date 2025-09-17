@@ -24,7 +24,6 @@ const Contacts = () => {
 
     const navigate = useNavigate();
 
-    // Charger les contacts au montage du composant
     useEffect(() => {
         if (!AuthService.isAuthenticated()) {
             console.log('Utilisateur non authentifié, redirection vers la page de connexion');
@@ -34,60 +33,36 @@ const Contacts = () => {
         fetchContacts();
     }, [navigate]);
 
-    // Récupérer tous les contacts
     const fetchContacts = async () => {
         try {
             setLoading(true);
             setError('');
             const data = await ContactsService.getContacts();
-            console.log("data", data);
             setContacts(data.contacts || data || []);
         } catch (error) {
             console.error('Erreur lors du chargement des contacts:', error);
-
-            // Si l'erreur est liée à l'authentification, déconnecter l'utilisateur
-            if (error.response?.status === 401) {
-                console.log('Token expiré ou invalide, déconnexion automatique');
-                await AuthService.logout();
-                navigate('/login');
-                return;
-            }
-
             setError('Erreur lors du chargement des contacts');
         } finally {
-            console.log("finally");
             setLoading(false);
         }
     };
 
-    // Afficher la confirmation de déconnexion
     const handleLogout = () => {
         setShowLogoutConfirm(true);
     };
 
-    // Confirmer la déconnexion
-    const confirmLogout = async () => {
-        try {
-            const result = await AuthService.logout();
-            console.log(result.message);
-            setShowLogoutConfirm(false);
-            navigate('/');
-        } catch (error) {
-            console.error('Erreur lors de la déconnexion:', error);
-            setShowLogoutConfirm(false);
-            // Rediriger quand même vers la page d'accueil
-            navigate('/');
-        }
+    const confirmLogout = () => {
+        AuthService.logout();
+        setShowLogoutConfirm(false);
+        navigate('/');
     };
 
-    // Filtrer les contacts selon le terme de recherche
     const filteredContacts = contacts.filter(contact =>
         contact.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contact.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         contact.phone?.includes(searchTerm)
     );
 
-    // Ouvrir le modal pour ajouter un contact
     const openAddModal = () => {
         setModalMode('add');
         setSelectedContact(null);
@@ -99,7 +74,6 @@ const Contacts = () => {
         setShowModal(true);
     };
 
-    // Ouvrir le modal pour modifier un contact
     const openEditModal = (contact) => {
         setModalMode('edit');
         setSelectedContact(contact);
@@ -111,7 +85,6 @@ const Contacts = () => {
         setShowModal(true);
     };
 
-    // Fermer le modal
     const closeModal = () => {
         setShowModal(false);
         setSelectedContact(null);
@@ -122,7 +95,6 @@ const Contacts = () => {
         });
     };
 
-    // Gérer les changements dans le formulaire
     const handleFormChange = (e) => {
         setFormData({
             ...formData,
@@ -130,7 +102,6 @@ const Contacts = () => {
         });
     };
 
-    // Gérer les changements spécifiques pour le téléphone (nombres uniquement)
     const handlePhoneChange = (e) => {
         const value = e.target.value;
 
@@ -143,10 +114,8 @@ const Contacts = () => {
         });
     };
 
-
-    // Valider le numéro de téléphone
     const validatePhone = (phone) => {
-        if (!phone) return true; // Required validation is handled by HTML
+        if (!phone) return true;
 
         // Check if phone contains only numbers
         const isNumeric = /^\d+$/.test(phone);
@@ -155,14 +124,11 @@ const Contacts = () => {
         return isNumeric && isValidLength;
     };
 
-
-    // Soumettre le formulaire (ajout/modification)
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setFormLoading(true);
-        setError(''); // Clear previous errors
+        setError('');
 
-        // Validation côté client pour le téléphone
         if (!validatePhone(formData.phone)) {
             setError('Le numéro de téléphone doit contenir entre 10 et 20 chiffres.');
             setFormLoading(false);
@@ -173,37 +139,31 @@ const Contacts = () => {
             if (modalMode === 'add') {
                 await ContactsService.create(formData);
             } else {
-                await ContactsService.update(selectedContact._id || selectedContact.id, formData);
+                await ContactsService.update(selectedContact._id, formData);
             }
 
             await fetchContacts(); // Recharger la liste
             closeModal();
         } catch (error) {
-            console.log("error", error);
             setError(ApiHandleError(error));
-            // setError(`Erreur lors de la ${modalMode === 'add' ? 'création' : 'modification'} du contact`);
-            console.error('Erreur:', error);
         } finally {
             setFormLoading(false);
         }
     };
 
-    // Confirmer la suppression
     const confirmDelete = (contact) => {
         setDeleteConfirm(contact);
     };
 
-    // Supprimer un contact
     const handleDelete = async () => {
         if (!deleteConfirm) return;
 
         try {
-            await ContactsService.delete(deleteConfirm._id || deleteConfirm.id);
-            await fetchContacts(); // Recharger la liste
+            await ContactsService.delete(deleteConfirm._id);
+            await fetchContacts();
             setDeleteConfirm(null);
         } catch (error) {
             setError('Erreur lors de la suppression du contact');
-            console.error('Erreur:', error);
         }
     };
 
@@ -238,15 +198,6 @@ const Contacts = () => {
             {/* Barre d'actions */}
             {filteredContacts.length > 0 &&
                 <div className="actions-bar">
-                    {/* <div className="search-container">
-                    <input
-                        type="text"
-                        placeholder="🔍 Rechercher un contact..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                </div> */}
                     <button onClick={openAddModal} className="add-btn">
                         <i className="fas fa-plus"></i>
                         Ajouter un contact
@@ -286,7 +237,7 @@ const Contacts = () => {
                 ) : (
                     <div className="contacts-grid">
                         {filteredContacts.map((contact) => (
-                            <div key={contact._id || contact.id} className="contact-card">
+                            <div key={contact._id} className="contact-card">
                                 <div className="contact-avatar">
                                     {contact.firstName ? contact.firstName.charAt(0).toUpperCase() : <i className="fas fa-user"></i>}
                                 </div>
@@ -352,7 +303,7 @@ const Contacts = () => {
                                     value={formData.lastName}
                                     onChange={handleFormChange}
                                     required
-                                    placeholder="DUPONT"
+                                    placeholder="Dupont"
                                 />
                             </div>
 

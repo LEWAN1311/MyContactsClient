@@ -21,4 +21,28 @@ AxiosInstance.interceptors.request.use(
     }
 );
 
+// Intercepteur de réponse pour gérer les erreurs d'authentification globalement
+AxiosInstance.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        // Si l'erreur est liée à l'authentification
+        if (error.response?.status === 401 || error.response?.status === 403) {
+            // Vérifier si nous sommes déjà sur la page de login pour éviter les redirections en boucle
+            if (window.location.pathname !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/') {
+                console.log('Token expiré ou invalide, redirection vers la page de connexion');
+                
+                // Nettoyer le localStorage
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                
+                // Rediriger vers la page de login
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default AxiosInstance;

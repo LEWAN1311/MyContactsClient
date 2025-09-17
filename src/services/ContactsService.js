@@ -13,7 +13,6 @@ const ContactsService = {
 
     update: async (id, contactData) => {
         const response = await AxiosInstance.patch(`/contacts/${id}`, contactData);
-        console.log("response", response);
         return response.data;
     },
 

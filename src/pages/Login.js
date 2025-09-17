@@ -27,18 +27,13 @@ const Login = () => {
         setError('');
 
         try {
-            const result = await AuthService.login({
+            await AuthService.login({
                 'email': formData.email.trim(),
                 'password': formData.password
             })
             setLoading(false);
             navigate('/contacts');
         } catch (error) {
-            console.log('Login error received:', error);
-            console.log('Error response:', error.response);
-            console.log('Error status:', error.response?.status);
-            console.log('Error data:', error.response?.data);
-            
             setError(ApiHandleError(error));
             setLoading(false);
         }

@@ -58,13 +58,6 @@ const Home = () => {
               </div>
             </div>
             <div className="feature-item">
-              <i className="fas fa-search feature-icon"></i>
-              <div className="feature-text">
-                <h4>Recherche rapide</h4>
-                <p>Trouvez vos contacts instantanément</p>
-              </div>
-            </div>
-            <div className="feature-item">
               <i className="fas fa-shield-alt feature-icon"></i>
               <div className="feature-text">
                 <h4>Sécurisé</h4>
