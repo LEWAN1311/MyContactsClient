@@ -199,7 +199,7 @@ const Contacts = () => {
             <header className="contacts-header">
                 <div className="header-content">
                     <div className="header-left">
-                        <h1>Mes Contacts</h1>
+                        <h1>MyContacts</h1>
                     </div>
                     <div className="header-right">
                         <button onClick={handleLogout} className="logout-btn">

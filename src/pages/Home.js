@@ -10,7 +10,7 @@ const Home = () => {
         <div className="home-header">
           <div className="logo">
             <div className="logo-icon">📱</div>
-            <h1>ContactBook</h1>
+            <h1>MyContacts</h1>
           </div>
           <p className="tagline">Gérez vos contacts en toute simplicité</p>
         </div>
