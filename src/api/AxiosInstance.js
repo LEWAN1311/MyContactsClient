@@ -1,16 +1,21 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:3080/',
+    baseURL: process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:3080/',
+    timeout: parseInt(process.env.REACT_APP_API_TIMEOUT) || 10000,
     headers: {
         "Content-Type": "application/json",
     },
 });
 
+// Get environment variables with fallbacks
+const AUTH_TOKEN_KEY = process.env.REACT_APP_AUTH_TOKEN_KEY || 'authToken';
+const USER_DATA_KEY = process.env.REACT_APP_USER_DATA_KEY || 'userData';
+
 AxiosInstance.interceptors.request.use(
     (config) => {
         // Ajouter le token d'authentification aux en-têtes si disponible
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem(AUTH_TOKEN_KEY);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -34,8 +39,8 @@ AxiosInstance.interceptors.response.use(
                 console.log('Token expiré ou invalide, redirection vers la page de connexion');
                 
                 // Nettoyer le localStorage
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('userData');
+                localStorage.removeItem(AUTH_TOKEN_KEY);
+                localStorage.removeItem(USER_DATA_KEY);
                 
                 // Rediriger vers la page de login
                 window.location.href = '/login';

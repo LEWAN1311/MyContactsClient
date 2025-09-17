@@ -1,5 +1,9 @@
 import AxiosInstance from "../api/AxiosInstance";
 
+// Get environment variables with fallbacks
+const AUTH_TOKEN_KEY = process.env.REACT_APP_AUTH_TOKEN_KEY || 'authToken';
+const USER_DATA_KEY = process.env.REACT_APP_USER_DATA_KEY || 'userData';
+
 const AuthService = {
     login: async (credentials) => {
         try {
@@ -7,9 +11,9 @@ const AuthService = {
 
             // Stockage automatique du token si présent
             if (response.data.token) {
-                localStorage.setItem('authToken', response.data.token);
+                localStorage.setItem(AUTH_TOKEN_KEY, response.data.token);
                 if (response.data.user) {
-                    localStorage.setItem('userData', JSON.stringify(response.data.user));
+                    localStorage.setItem(USER_DATA_KEY, JSON.stringify(response.data.user));
                 }
             }
 
@@ -29,17 +33,17 @@ const AuthService = {
     },
 
     isAuthenticated: () => {
-        return !!localStorage.getItem('authToken');
+        return !!localStorage.getItem(AUTH_TOKEN_KEY);
     },
 
     getCurrentUser: () => {
-        const userData = localStorage.getItem('userData');
+        const userData = localStorage.getItem(USER_DATA_KEY);
         return userData ? JSON.parse(userData) : null;
     },
 
     logout: () => {
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userData');
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(USER_DATA_KEY);
     }
 }
 
