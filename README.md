@@ -5,6 +5,7 @@ A modern React-based contacts management application with user authentication an
 ## Features
 
 - **User Authentication**: Secure login and registration with JWT token management
+- **Logout Functionality**: Secure logout with confirmation modal and automatic session cleanup
 - **Contact Management**: Create, read, update, and delete personal contacts
 - **Phone Validation**: Numeric-only phone input with 10-20 digit validation
 - **Responsive Design**: Mobile-first design with modern UI components
@@ -213,7 +214,8 @@ const AxiosInstance = axios.create({
 1. **Login/Register** → JWT token received from server
 2. **Token Storage** → Stored in `localStorage`
 3. **Auto-attachment** → Added to all API requests via Axios interceptors
-4. **Logout** → Token removed from storage
+4. **Logout** → Confirmation modal → Token removed from storage → Redirect to home
+5. **Auto-logout** → Automatic logout on 401 errors (expired tokens)
 
 ### Error Handling Architecture
 

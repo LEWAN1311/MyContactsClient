@@ -5,7 +5,7 @@ const ApiHandleError = (error) => {
         switch (error.response.status) {
             case 400:
                 const errorMessage = error.response.data?.message || '';
-                // Check if it's a phone number validation error
+                
                 if (errorMessage.toLowerCase().includes('phone') || 
                     errorMessage.toLowerCase().includes('téléphone') ||
                     (errorMessage.toLowerCase().includes('10') && errorMessage.toLowerCase().includes('20'))) {
@@ -15,21 +15,14 @@ const ApiHandleError = (error) => {
             case 401:
                 return 'Non autorisé. Veuillez vous reconnecter.';
             case 403:
-                return 'Accès interdit.';
+                return 'Session expirée. Veuillez vous reconnecter.';
             case 404:
                 return 'Ressource non trouvée.';
             case 405:
                 return 'Email ou mot de passe incorrect.';
             case 409:
                 const conflictErrorMessage = error.response.data?.message || '';
-                // Check if it's a duplicate phone number error
-                if (conflictErrorMessage.toLowerCase().includes('phone') && 
-                    (conflictErrorMessage.toLowerCase().includes('duplicate') || 
-                     conflictErrorMessage.toLowerCase().includes('already exists') ||
-                     conflictErrorMessage.toLowerCase().includes('déjà utilisé'))) {
-                    return 'Ce numéro de téléphone existe déjà dans la liste des contacts.';
-                }
-                // Check if it's a duplicate email error
+
                 if (conflictErrorMessage === 'Email already exists' || 
                     conflictErrorMessage.toLowerCase().includes('email') && 
                     conflictErrorMessage.toLowerCase().includes('already exists')) {
