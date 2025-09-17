@@ -7,7 +7,6 @@ A modern React-based contacts management application with user authentication an
 - **User Authentication**: Secure login and registration with JWT token management
 - **Contact Management**: Create, read, update, and delete personal contacts
 - **Phone Validation**: Numeric-only phone input with 10-20 digit validation
-- **Search & Filter**: Search contacts by name or phone number
 - **Responsive Design**: Mobile-first design with modern UI components
 - **Error Handling**: Comprehensive error handling with user-friendly French messages
 - **Real-time Validation**: Client-side validation with immediate feedback
@@ -85,7 +84,7 @@ yarn install
 Create a `.env` file in the root directory:
 
 ```env
-REACT_APP_API_BASE_URL=http://127.0.0.1:3080
+REACT_APP_API_BASE_URL=http://127.0.0.1:3000
 REACT_APP_APP_NAME=Contacts Management
 ```
 
