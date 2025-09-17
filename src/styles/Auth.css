@@ -45,6 +45,11 @@
   font-size: 14px;
 }
 
+.form-group label i {
+  color: #667eea;
+  font-size: 16px;
+}
+
 .form-group input {
   padding: 12px 16px;
   border: 2px solid #e1e5e9;
@@ -176,6 +181,7 @@
   font-size: 48px;
   margin-bottom: 20px;
   animation: bounce 0.6s ease-in-out;
+  color: #4CAF50;
 }
 
 .success-content h3 {

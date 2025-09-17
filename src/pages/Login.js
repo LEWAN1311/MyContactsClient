@@ -53,7 +53,10 @@ const Login = () => {
 
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <label htmlFor="email">
+                            <i className="fas fa-envelope"></i>
+                            Email
+                        </label>
                         <input
                             type="email"
                             id="email"
@@ -66,7 +69,10 @@ const Login = () => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="password">Mot de passe</label>
+                        <label htmlFor="password">
+                            <i className="fas fa-lock"></i>
+                            Mot de passe
+                        </label>
                         <input
                             type="password"
                             id="password"
@@ -83,6 +89,7 @@ const Login = () => {
                         className="auth-button"
                         disabled={loading}
                     >
+                        <i className="fas fa-sign-in-alt"></i>
                         {loading ? 'Connexion...' : 'Se connecter'}
                     </button>
                 </form>

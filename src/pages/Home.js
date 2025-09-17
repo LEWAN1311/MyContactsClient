@@ -9,7 +9,7 @@ const Home = () => {
         {/* Header avec logo/titre */}
         <div className="home-header">
           <div className="logo">
-            <div className="logo-icon">📱</div>
+            <i className="fas fa-address-book logo-icon"></i>
             <h1>MyContacts</h1>
           </div>
           <p className="tagline">Gérez vos contacts en toute simplicité</p>
@@ -29,7 +29,7 @@ const Home = () => {
           {/* Boutons d'action */}
           <div className="home-actions">
             <Link to="/login" className="action-button login-button">
-              <div className="button-icon">🔑</div>
+              <i className="fas fa-sign-in-alt button-icon"></i>
               <div className="button-content">
                 <h3>Se connecter</h3>
                 <p>J'ai déjà un compte</p>
@@ -37,7 +37,7 @@ const Home = () => {
             </Link>
 
             <Link to="/register" className="action-button register-button">
-              <div className="button-icon">✨</div>
+              <i className="fas fa-user-plus button-icon"></i>
               <div className="button-content">
                 <h3>Créer un compte</h3>
                 <p>Je suis nouveau utilisateur</p>
@@ -51,21 +51,21 @@ const Home = () => {
           <h3>Fonctionnalités principales</h3>
           <div className="features-grid">
             <div className="feature-item">
-              <div className="feature-icon">📋</div>
+              <i className="fas fa-clipboard-list feature-icon"></i>
               <div className="feature-text">
                 <h4>Gestion complète</h4>
                 <p>Ajoutez, modifiez et organisez vos contacts</p>
               </div>
             </div>
-            {/* <div className="feature-item">
-              <div className="feature-icon">🔍</div>
+            <div className="feature-item">
+              <i className="fas fa-search feature-icon"></i>
               <div className="feature-text">
                 <h4>Recherche rapide</h4>
                 <p>Trouvez vos contacts instantanément</p>
               </div>
-            </div> */}
+            </div>
             <div className="feature-item">
-              <div className="feature-icon">🔒</div>
+              <i className="fas fa-shield-alt feature-icon"></i>
               <div className="feature-text">
                 <h4>Sécurisé</h4>
                 <p>Vos données sont protégées et privées</p>

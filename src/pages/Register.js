@@ -58,7 +58,10 @@ const Register = () => {
         <form onSubmit={handleSubmit} className="auth-form">
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              <i className="fas fa-envelope"></i>
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -71,7 +74,10 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
+            <label htmlFor="password">
+              <i className="fas fa-lock"></i>
+              Mot de passe
+            </label>
             <input
               type="password"
               id="password"
@@ -88,6 +94,7 @@ const Register = () => {
             className="auth-button"
             disabled={loading}
           >
+            <i className="fas fa-user-plus"></i>
             {loading ? 'Inscription...' : 'Créer le compte'}
           </button>
         </form>
@@ -108,12 +115,13 @@ const Register = () => {
         <div className="modal-overlay">
           <div className="modal-content success-modal">
             <div className="success-content">
-              <div className="success-icon">✅</div>
+              <i className="fas fa-check-circle success-icon"></i>
               <h3>Compte créé avec succès !</h3>
               <p>
                 Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter avec vos identifiants.
               </p>
               <button onClick={handleSuccessOk} className="success-ok-btn">
+                <i className="fas fa-check"></i>
                 OK
               </button>
             </div>

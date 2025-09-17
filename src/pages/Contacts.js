@@ -44,7 +44,7 @@ const Contacts = () => {
             setContacts(data.contacts || data || []);
         } catch (error) {
             console.error('Erreur lors du chargement des contacts:', error);
-            
+
             // Si l'erreur est liée à l'authentification, déconnecter l'utilisateur
             if (error.response?.status === 401) {
                 console.log('Token expiré ou invalide, déconnexion automatique');
@@ -52,7 +52,7 @@ const Contacts = () => {
                 navigate('/login');
                 return;
             }
-            
+
             setError('Erreur lors du chargement des contacts');
         } finally {
             console.log("finally");
@@ -133,10 +133,10 @@ const Contacts = () => {
     // Gérer les changements spécifiques pour le téléphone (nombres uniquement)
     const handlePhoneChange = (e) => {
         const value = e.target.value;
-        
+
         // Only allow numbers
         const numericValue = value.replace(/[^0-9]/g, '');
-        
+
         setFormData({
             ...formData,
             phone: numericValue
@@ -147,11 +147,11 @@ const Contacts = () => {
     // Valider le numéro de téléphone
     const validatePhone = (phone) => {
         if (!phone) return true; // Required validation is handled by HTML
-        
+
         // Check if phone contains only numbers
         const isNumeric = /^\d+$/.test(phone);
         const isValidLength = phone.length >= 10 && phone.length <= 20;
-        
+
         return isNumeric && isValidLength;
     };
 
@@ -224,6 +224,7 @@ const Contacts = () => {
             <header className="contacts-header">
                 <div className="header-content">
                     <div className="header-left">
+                        <i className="fas fa-address-book header-icon"></i>
                         <h1>MyContacts</h1>
                     </div>
                     <div className="header-right">
@@ -235,8 +236,9 @@ const Contacts = () => {
             </header>
 
             {/* Barre d'actions */}
-            <div className="actions-bar">
-                {/* <div className="search-container">
+            {filteredContacts.length > 0 &&
+                <div className="actions-bar">
+                    {/* <div className="search-container">
                     <input
                         type="text"
                         placeholder="🔍 Rechercher un contact..."
@@ -245,16 +247,20 @@ const Contacts = () => {
                         className="search-input"
                     />
                 </div> */}
-                <button onClick={openAddModal} className="add-btn">
-                    Ajouter un contact
-                </button>
-            </div>
+                    <button onClick={openAddModal} className="add-btn">
+                        <i className="fas fa-plus"></i>
+                        Ajouter un contact
+                    </button>
+                </div>
+            }
 
             {/* Messages d'erreur */}
             {error && (
                 <div className="error-banner">
                     {error}
-                    <button onClick={() => setError('')}>✕</button>
+                    <button onClick={() => setError('')}>
+                        <i className="fas fa-times"></i>
+                    </button>
                 </div>
             )}
 
@@ -262,7 +268,7 @@ const Contacts = () => {
             <div className="contacts-content">
                 {filteredContacts.length === 0 ? (
                     <div className="empty-state">
-                        <div className="empty-icon">📝</div>
+                        <i className="fas fa-address-book empty-icon"></i>
                         <h3>{searchTerm ? 'Aucun contact trouvé' : 'Aucun contact'}</h3>
                         <p>
                             {searchTerm
@@ -272,6 +278,7 @@ const Contacts = () => {
                         </p>
                         {!searchTerm && (
                             <button onClick={openAddModal} className="add-first-btn">
+                                <i className="fas fa-plus"></i>
                                 Ajouter mon premier contact
                             </button>
                         )}
@@ -281,13 +288,13 @@ const Contacts = () => {
                         {filteredContacts.map((contact) => (
                             <div key={contact._id || contact.id} className="contact-card">
                                 <div className="contact-avatar">
-                                    {contact.firstName ? contact.firstName.charAt(0).toUpperCase() : '👤'}
+                                    {contact.firstName ? contact.firstName.charAt(0).toUpperCase() : <i className="fas fa-user"></i>}
                                 </div>
                                 <div className="contact-info">
                                     <h3>{contact.firstName}</h3>
                                     {contact.firstName && <p className="contact-firstName">{contact.firstName}</p>}
                                     {contact.lastName && <p className="contact-lastName">{contact.lastName}</p>}
-                                    {contact.phone && <p className="contact-phone">📞 {contact.phone}</p>}
+                                    {contact.phone && <p className="contact-phone"><i className="fas fa-phone"></i> {contact.phone}</p>}
                                 </div>
                                 <div className="contact-actions">
                                     <button
@@ -295,14 +302,14 @@ const Contacts = () => {
                                         className="edit-btn"
                                         title="Modifier"
                                     >
-                                        ✏️
+                                        <i className="fas fa-edit"></i>
                                     </button>
                                     <button
                                         onClick={() => confirmDelete(contact)}
                                         className="delete-btn"
                                         title="Supprimer"
                                     >
-                                        🗑️
+                                        <i className="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
@@ -317,7 +324,9 @@ const Contacts = () => {
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
                             <h2>{modalMode === 'add' ? 'Ajouter un contact' : 'Modifier le contact'}</h2>
-                            <button onClick={closeModal} className="close-btn">✕</button>
+                            <button onClick={closeModal} className="close-btn">
+                                <i className="fas fa-times"></i>
+                            </button>
                         </div>
 
                         <form onSubmit={handleFormSubmit} className="contact-form">
@@ -391,7 +400,7 @@ const Contacts = () => {
                 <div className="modal-overlay">
                     <div className="modal-content confirmation-modal">
                         <div className="confirmation-content">
-                            <div className="warning-icon">⚠️</div>
+                            <i className="fas fa-exclamation-triangle warning-icon"></i>
                             <h3>Confirmer la suppression</h3>
                             <p>
                                 Êtes-vous sûr de vouloir supprimer le contact <strong>{deleteConfirm.firstName} {deleteConfirm.lastName}</strong> ?

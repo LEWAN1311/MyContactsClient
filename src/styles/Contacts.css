@@ -20,6 +20,17 @@
   margin: 0 auto;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-icon {
+  font-size: 28px;
+  color: white;
+}
+
 .header-left h1 {
   margin: 0 0 5px 0;
   font-size: 28px;
@@ -158,6 +169,7 @@
   font-size: 64px;
   margin-bottom: 20px;
   opacity: 0.5;
+  color: #667eea;
 }
 
 .empty-state h3 {
@@ -242,6 +254,10 @@
   color: #666;
 }
 
+.contact-phone i {
+  color: #667eea;
+}
+
 .contact-actions {
   display: flex;
   gap: 8px;
@@ -259,6 +275,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.edit-btn i, .delete-btn i {
+  font-size: 14px;
 }
 
 .edit-btn {
@@ -428,6 +448,7 @@
 .warning-icon {
   font-size: 48px;
   margin-bottom: 15px;
+  color: #f59e0b;
 }
 
 .confirmation-content h3 {
