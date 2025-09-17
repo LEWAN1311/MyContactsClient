@@ -39,6 +39,27 @@ const AuthService = {
     getCurrentUser: () => {
         const userData = localStorage.getItem('userData');
         return userData ? JSON.parse(userData) : null;
+    },
+
+    // Déconnexion
+    logout: async () => {
+        try {
+            // Optionnel: Appeler l'API de déconnexion côté serveur
+            // await AxiosInstance.post('/auth/logout');
+            
+            // Supprimer les données d'authentification du localStorage
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            
+            return { success: true, message: 'Déconnexion réussie' };
+        } catch (error) {
+            // Même en cas d'erreur serveur, on supprime les données locales
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            
+            console.error('Erreur lors de la déconnexion:', error);
+            return { success: true, message: 'Déconnexion locale réussie' };
+        }
     }
 }
 

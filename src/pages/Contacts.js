@@ -20,14 +20,16 @@ const Contacts = () => {
     });
     const [formLoading, setFormLoading] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
     const navigate = useNavigate();
 
     // Charger les contacts au montage du composant
     useEffect(() => {
         if (!AuthService.isAuthenticated()) {
-          navigate('/login');
-          return;
+            console.log('Utilisateur non authentifié, redirection vers la page de connexion');
+            navigate('/login');
+            return;
         }
         fetchContacts();
     }, [navigate]);
@@ -41,18 +43,41 @@ const Contacts = () => {
             console.log("data", data);
             setContacts(data.contacts || data || []);
         } catch (error) {
+            console.error('Erreur lors du chargement des contacts:', error);
+            
+            // Si l'erreur est liée à l'authentification, déconnecter l'utilisateur
+            if (error.response?.status === 401) {
+                console.log('Token expiré ou invalide, déconnexion automatique');
+                await AuthService.logout();
+                navigate('/login');
+                return;
+            }
+            
             setError('Erreur lors du chargement des contacts');
-            console.error('Erreur:', error);
         } finally {
             console.log("finally");
             setLoading(false);
         }
     };
 
-    // Déconnexion
-    const handleLogout = async () => {
-        await AuthService.logout();
-        navigate('/');
+    // Afficher la confirmation de déconnexion
+    const handleLogout = () => {
+        setShowLogoutConfirm(true);
+    };
+
+    // Confirmer la déconnexion
+    const confirmLogout = async () => {
+        try {
+            const result = await AuthService.logout();
+            console.log(result.message);
+            setShowLogoutConfirm(false);
+            navigate('/');
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+            setShowLogoutConfirm(false);
+            // Rediriger quand même vers la page d'accueil
+            navigate('/');
+        }
     };
 
     // Filtrer les contacts selon le terme de recherche
@@ -378,6 +403,29 @@ const Contacts = () => {
                                 </button>
                                 <button onClick={handleDelete} className="delete-confirm-btn">
                                     Supprimer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de confirmation de déconnexion */}
+            {showLogoutConfirm && (
+                <div className="modal-overlay">
+                    <div className="modal-content confirmation-modal">
+                        <div className="confirmation-content">
+                            <h3>Confirmer la déconnexion</h3>
+                            <p>
+                                Êtes-vous sûr de vouloir vous déconnecter ?
+                                Vous devrez vous reconnecter pour accéder à vos contacts.
+                            </p>
+                            <div className="confirmation-actions">
+                                <button onClick={() => setShowLogoutConfirm(false)} className="cancel-btn">
+                                    Annuler
+                                </button>
+                                <button onClick={confirmLogout} className="logout-confirm-btn">
+                                    Se déconnecter
                                 </button>
                             </div>
                         </div>

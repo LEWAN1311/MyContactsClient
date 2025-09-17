@@ -548,3 +548,27 @@
   color: #e53e3e;
   font-weight: 500;
 }
+
+/* Logout confirmation button styles */
+.logout-confirm-btn {
+  background: linear-gradient(135deg, #e53e3e, #c53030);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.logout-confirm-btn:hover {
+  background: linear-gradient(135deg, #c53030, #9c2626);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+}
+
+.logout-confirm-btn:active {
+  transform: translateY(0);
+}
