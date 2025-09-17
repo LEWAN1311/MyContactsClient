@@ -1,4 +1,8 @@
 const ApiHandleError = (error) => {
+    if (!error) {
+        return 'Une erreur inattendue s\'est produite.';
+    }
+    
     if (error.response) {
         
         // Erreurs HTTP
